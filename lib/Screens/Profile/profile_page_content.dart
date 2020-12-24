@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doktorapp/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:doktorapp/globals.dart';
+import 'package:provider/provider.dart';
+import 'package:doktorapp/Screens/Profile/doctor_profile_view.dart';
 
 class ProfilePageContent extends StatefulWidget {
   @override
@@ -13,7 +16,6 @@ class ProfilePageContent extends StatefulWidget {
 class _ProfilePageContentState extends State<ProfilePageContent> {
   @override
   void initState() {
-    Globals.getDoctorData();
     super.initState();
   }
 
@@ -26,133 +28,169 @@ class _ProfilePageContentState extends State<ProfilePageContent> {
           currentFocus.unfocus();
         }
       },
-      child: Container(
-        child: SingleChildScrollView(
-          child: ListBody(
-            children: [
-              Column(children: [
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kPageHorizontalPadding),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(
-                            vertical: kPageVerticalPadding * 2),
-                        padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0),
-                        child: TextField(
-                          textInputAction: TextInputAction.search,
-                          cursorColor: kPrimaryColor,
-                          keyboardType: TextInputType.text,
-                          decoration: InputDecoration(
-                            fillColor: kBackgroundColor,
-                            filled: true,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: kPageHorizontalPadding,
-                                vertical: 15.0),
-                            hintText: 'Search, e.g. Dr. Louis Pasteur',
-                            hintStyle: kHintTextStyle,
-                            isDense: true,
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                FocusScopeNode currentFocus =
-                                    FocusScope.of(context);
-                                currentFocus.unfocus();
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: kPageVerticalPadding + 8,
-                                    horizontal: kPageHorizontalPadding + 2),
-                                decoration: BoxDecoration(
-                                  gradient: kPrimaryGradient,
-                                  borderRadius:
-                                      BorderRadius.circular(kRoundedCorners),
-                                ),
-                                child: Icon(
-                                  FontAwesomeIcons.search,
-                                  color: Colors.white,
+      child: Container(child: Consumer<Globals>(
+        builder: (context, globals, child) {
+          return SingleChildScrollView(
+            child: ListBody(
+              children: [
+                Column(children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: kPageHorizontalPadding),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: kPageVerticalPadding * 2),
+                          padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0),
+                          child: TextField(
+                            textInputAction: TextInputAction.search,
+                            cursorColor: kPrimaryColor,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              fillColor: kBackgroundColor,
+                              filled: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: kPageHorizontalPadding,
+                                  vertical: 15.0),
+                              hintText: 'Search, e.g. Dr. Louis Pasteur',
+                              hintStyle: kHintTextStyle,
+                              isDense: true,
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  FocusScopeNode currentFocus =
+                                      FocusScope.of(context);
+                                  currentFocus.unfocus();
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: kPageVerticalPadding + 8,
+                                      horizontal: kPageHorizontalPadding + 2),
+                                  decoration: BoxDecoration(
+                                    gradient: kPrimaryGradient,
+                                    borderRadius:
+                                        BorderRadius.circular(kRoundedCorners),
+                                  ),
+                                  child: Icon(
+                                    FontAwesomeIcons.search,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kRoundedCorners),
-                              borderSide: BorderSide(
-                                width: 0,
-                                style: BorderStyle.none,
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kRoundedCorners),
+                                borderSide: BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: kPageVerticalPadding,
-                      ),
-                      Text(
-                        'Categories',
-                        style: kBigHeadingTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: kPageVerticalPadding * 1.5),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
                         SizedBox(
-                          width: 10.0,
+                          height: kPageVerticalPadding,
                         ),
-                        HorizontalListCategoryItemBuilder(
-                          title: 'Heart',
-                          icon: FontAwesomeIcons.kissWinkHeart,
-                        ),
-                        HorizontalListCategoryItemBuilder(
-                          title: 'Kidney',
-                          icon: FontAwesomeIcons.solidNewspaper,
-                        ),
-                        HorizontalListCategoryItemBuilder(
-                          title: 'Brain',
-                          icon: FontAwesomeIcons.brain,
-                        ),
-                        HorizontalListCategoryItemBuilder(
-                          title: 'Brain',
-                          icon: FontAwesomeIcons.brain,
+                        Text(
+                          'Categories',
+                          style: kBigHeadingTextStyle,
                         ),
                       ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: kPageHorizontalPadding),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Top Doctors',
-                        style: kBigHeadingTextStyle,
+                  Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: kPageVerticalPadding * 1.5),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          StreamBuilder(
+                              stream: globals.categories.snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  final category = snapshot.data.docs;
+                                  List<HorizontalListCategoryItemBuilder>
+                                      horizontalListWidgets = [];
+                                  for (var categories in category) {
+                                    final categoryAlias =
+                                        categories.data()['categoryAlias'];
+                                    final categoryAvatar =
+                                        categories.data()['categoryAvatar'];
+                                    final horizontalListWidget =
+                                        HorizontalListCategoryItemBuilder(
+                                            icon: categoryAvatar,
+                                            title: categoryAlias);
+                                    horizontalListWidgets
+                                        .add(horizontalListWidget);
+                                  }
+
+                                  return Row(
+                                    children: horizontalListWidgets,
+                                  );
+                                  return Container();
+                                }
+                                return Container();
+                              })
+                        ],
                       ),
-                      SizedBox(
-                        height: kPageVerticalPadding,
-                      ),
-                      TopDoctorsBuilder(
-                        doctorAvatarAssetName:
-                            'assets/images/defaultProfileImage.png',
-                        doctorName: 'Dr. Jaspreet Singh',
-                        doctorSpeciality: 'Dil ka doctor',
-                      )
-                    ],
+                    ),
                   ),
-                ),
-              ]),
-            ],
-          ),
-        ),
-      ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: kPageHorizontalPadding),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Top Doctors',
+                          style: kBigHeadingTextStyle,
+                        ),
+                        SizedBox(
+                          height: kPageVerticalPadding,
+                        ),
+                        StreamBuilder<QuerySnapshot>(
+                          stream: globals.doctors.snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final doc = snapshot.data.docs;
+                              List<TopDoctorsBuilder> topDoctorWidget = [];
+                              for (var docs in doc) {
+                                final docFirstName = docs.data()['firstName'];
+                                final docLastName = docs.data()['lastName'];
+                                final docSpeciality = docs.data()['speciality'];
+                                final docAbout = docs.data()['doctorAbout'];
+                                final docNumber =
+                                    docs.data()['doctorContactNumber'];
+                                final doctorWidget = TopDoctorsBuilder(
+                                    doctorAbout: docAbout,
+                                    doctorNumber: docNumber,
+                                    doctorAvatarAssetName:
+                                        'assets/images/userImage.jpg',
+                                    doctorName: '$docFirstName $docLastName',
+                                    doctorSpeciality: '$docSpeciality');
+                                topDoctorWidget.add(doctorWidget);
+                              }
+                              return Column(
+                                children: topDoctorWidget,
+                              );
+                            }
+                            return Container();
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ]),
+              ],
+            ),
+          );
+        },
+      )),
     );
   }
 }
@@ -161,21 +199,32 @@ class TopDoctorsBuilder extends StatelessWidget {
   TopDoctorsBuilder(
       {@required this.doctorAvatarAssetName,
       @required this.doctorName,
-      @required this.doctorSpeciality});
+      @required this.doctorSpeciality,
+      @required this.doctorAbout,
+      @required this.doctorNumber});
   final String doctorSpeciality;
   final String doctorName;
   final String doctorAvatarAssetName;
+  final String doctorAbout;
+  final String doctorNumber;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        print(Globals.doctorSpeciality);
-        print(Globals.doctorMap);
-        print(Globals.doctorSpeciality);
-        // Navigator.pushNamed(context, DoctorProfileView.id);
-      },
-      child: Card(
+    return Consumer<Globals>(builder: (context, globals, child) {
+      globals.getUserData();
+      return GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DoctorProfileView(
+                        doctorFullName: this.doctorName,
+                        doctorSpeciality: this.doctorSpeciality,
+                        doctorAbout: this.doctorAbout,
+                        doctorContactNumber: this.doctorNumber,
+                      )));
+        },
+        child: Card(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(kRoundedCorners)),
           color: kBackgroundColor,
@@ -220,6 +269,11 @@ class TopDoctorsBuilder extends StatelessWidget {
                     ],
                   ),
                 ),
+                Visibility(
+                    visible: false,
+                    child: Column(
+                      children: [Text(doctorAbout), Text(doctorNumber)],
+                    )),
                 Flexible(child: Container()),
                 GestureDetector(
                   child: Icon(
@@ -229,8 +283,10 @@ class TopDoctorsBuilder extends StatelessWidget {
                 )
               ],
             ),
-          )),
-    );
+          ),
+        ),
+      );
+    });
   }
 }
 
@@ -239,7 +295,7 @@ class HorizontalListCategoryItemBuilder extends StatelessWidget {
       {@required this.icon, @required this.title});
 
   final String title;
-  final IconData icon;
+  final String icon;
 
   @override
   Widget build(BuildContext context) {
@@ -254,10 +310,9 @@ class HorizontalListCategoryItemBuilder extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(
+          Image.network(
             icon,
-            color: Colors.white,
-            size: 45.0,
+            width: 50,
           ),
           Text(
             title,

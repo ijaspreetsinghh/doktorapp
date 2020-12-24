@@ -49,6 +49,7 @@ const kPrimaryColor = Color(0xFF1482FF); //005EFF or 0066ff  0xFF005CE6
 const kBorderColor = Color(0xFFE71D36);
 const kTitleColor = Color(0xFF2E2D2D);
 const kAccentColor = Color(0xFF1482FF);
+const kCardBackgroundColor = Color(0xFF3362CC);
 const kSecondaryColor = Color(0xFF555555); //008DFF
 const kBackgroundColor = Color(0xFFF7F7F7);
 const kWhiteBackgroundColor = Colors.white;

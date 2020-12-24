@@ -4,7 +4,6 @@ import 'package:doktorapp/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class UpdateProfileInformation extends StatefulWidget {
-  final String firstName = Globals.userFirstName;
   static const id = 'UpdateProfileInformation';
   @override
   _UpdateProfileInformationState createState() =>
@@ -17,14 +16,9 @@ class _UpdateProfileInformationState extends State<UpdateProfileInformation> {
   bool genderFieldOk = false;
   bool genderBorder = false;
   TextEditingController firstNameController =
-      TextEditingController(text: '${Globals.userFullName}' ?? 'Not Set');
+      TextEditingController(text: 'Not Set');
   TextEditingController genderController =
-      TextEditingController(text: '${Globals.userGender}' ?? 'Not Set');
-  @override
-  void initState() {
-    super.initState();
-    Globals.getUserData();
-  }
+      TextEditingController(text: 'Not Set');
 
   @override
   Widget build(BuildContext context) {

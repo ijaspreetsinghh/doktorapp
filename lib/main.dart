@@ -18,6 +18,7 @@ import 'package:doktorapp/Screens/Reminder/reminder.dart';
 import 'package:doktorapp/Screens/TestBooking/test_booking.dart';
 import 'package:doktorapp/Screens/UserProfileInfo/user_profile_info.dart';
 import 'package:doktorapp/Screens/IntroductionScreen/introduction_screen.dart';
+import 'package:provider/provider.dart';
 import 'Screens/SignUp/sign_up_continue.dart';
 import 'globals.dart';
 
@@ -50,8 +51,6 @@ class _AppState extends State<App> {
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
           AppLoading();
-          Globals.getCurrentUser();
-          Globals.getUserData();
 
           return MyMaterialApp();
         }
@@ -71,34 +70,41 @@ class MyMaterialApp extends StatefulWidget {
 class _MyMaterialAppState extends State<MyMaterialApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      color: kPrimaryColor,
-      initialRoute:
-          Globals.userLoggedIn ? MainProfilePage.id : OnBoardingPage.id,
-      routes: {
-        SignUpContinue.id: (context) => SignUpContinue(),
-        ForgotPassword.id: (context) => ForgotPassword(),
-        OnBoardingPage.id: (context) => OnBoardingPage(),
-        SignInScreen.id: (context) => SignInScreen(),
-        SignUpScreen.id: (context) => SignUpScreen(),
-        MainProfilePage.id: (context) => MainProfilePage(),
-        ActiveAppointment.id: (context) => ActiveAppointment(),
-        Consultation.id: (context) => Consultation(),
-        MedicalRecord.id: (context) => MedicalRecord(),
-        MyDoctor.id: (context) => MyDoctor(),
-        Reminder.id: (context) => Reminder(),
-        Orders.id: (context) => Orders(),
-        TestBooking.id: (context) => TestBooking(),
-        UserProfileInfo.id: (context) => UserProfileInfo(),
-        DoctorProfileView.id: (context) => DoctorProfileView(),
-      },
-      theme: ThemeData().copyWith(
-        primaryColor: kPrimaryColor,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        scaffoldBackgroundColor: kBackgroundColor,
-      ),
-    );
+    return Provider<Globals>(
+        create: (_) => Globals(),
+        child: Consumer<Globals>(builder: (context, globals, child) {
+          globals.getDoctorData();
+          globals.getUserData();
+          globals.getCurrentUser();
+          globals.getAppointments();
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            color: kPrimaryColor,
+            initialRoute:
+                globals.userLoggedIn ? MainProfilePage.id : OnBoardingPage.id,
+            routes: {
+              SignUpContinue.id: (context) => SignUpContinue(),
+              ForgotPassword.id: (context) => ForgotPassword(),
+              OnBoardingPage.id: (context) => OnBoardingPage(),
+              SignInScreen.id: (context) => SignInScreen(),
+              SignUpScreen.id: (context) => SignUpScreen(),
+              MainProfilePage.id: (context) => MainProfilePage(),
+              ActiveAppointment.id: (context) => ActiveAppointment(),
+              Consultation.id: (context) => Consultation(),
+              MedicalRecord.id: (context) => MedicalRecord(),
+              MyDoctor.id: (context) => MyDoctor(),
+              Reminder.id: (context) => Reminder(),
+              Orders.id: (context) => Orders(),
+              TestBooking.id: (context) => TestBooking(),
+              UserProfileInfo.id: (context) => UserProfileInfo(),
+            },
+            theme: ThemeData().copyWith(
+              primaryColor: kPrimaryColor,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              scaffoldBackgroundColor: kBackgroundColor,
+            ),
+          );
+        }));
   }
 }
 

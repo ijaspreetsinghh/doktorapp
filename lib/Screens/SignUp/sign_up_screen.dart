@@ -23,6 +23,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   String currentUserId;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference doctors =
+      FirebaseFirestore.instance.collection('doctors');
+
   void getCurrentUser() async {
     try {
       final user = _auth.currentUser;
@@ -44,10 +47,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
         .doc(currentUserId)
         .set({
           'firstName': firstName, // John Doe
+          'lastName': lastName, 'userType': userType,
+          // Stokes and Sons
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
+
+  Future<void> addDoctor() {
+    // Call the user's CollectionReference to add a new user
+    return doctors
+        .doc(currentUserId)
+        .set({
+          'firstName': firstName, // John Doe
           'lastName': lastName, // Stokes and Sons
           'userId': currentUserId,
-          'userType': 'Citizen',
-          'speciality': userType,
+          'speciality': speciality,
+          'doctorAbout': aboutDoctor,
+          'userType': userType,
+          'doctorContactNumber': doctorContactNumber,
         })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
@@ -65,15 +83,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   String email;
   String password;
-  String confirmPassword;
+  String speciality = 'default speciality';
+  String doctorContactNumber = '9999999999';
+  String aboutDoctor = 'default doctor about';
   final _signUpFormKey = GlobalKey<FormState>();
   String emailRegex =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  final passwordController = TextEditingController();
-  final emailController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
-  final doctorSpecialityController = TextEditingController();
-
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController doctorSpecialityController = TextEditingController();
+  TextEditingController doctorContactNumberController = TextEditingController();
+  TextEditingController doctorAboutController = TextEditingController();
   bool _obscureText = true;
   bool showEmailBorder = false;
   bool showPasswordBorder = false;
@@ -84,7 +104,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool firstNameFieldOk = false;
   bool passwordFieldOk = false;
   bool confirmPasswordFieldOk = false;
+  bool showDoctorContactNumberBorder = false;
+  bool doctorContactNumberFieldOk = false;
+  bool doctorAboutFieldOk = false;
 
+  bool showDoctorAboutBorder = false;
   String firstName;
 
   String lastName;
@@ -467,6 +491,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: TextFormField(
                               controller: passwordController,
                               obscureText: _obscureText,
+                              textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.visiblePassword,
                               cursorColor: kPrimaryColor,
                               validator: (value) {
@@ -528,6 +553,79 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(
+                                color: showDoctorContactNumberBorder
+                                    ? kBorderColor
+                                    : Colors.white,
+                                width: 2.0,
+                              ),
+                              borderRadius:
+                                  BorderRadius.circular(kRoundedCorners),
+                            ),
+                            child: Container(
+                              // color: Colors.white,
+                              padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.circular(kRoundedCorners),
+                              ),
+                              child: TextFormField(
+                                controller: doctorContactNumberController,
+                                keyboardType: TextInputType.number,
+                                cursorColor: kPrimaryColor,
+                                validator: (value) {
+                                  if (value.length != 10) {
+                                    setState(() {
+                                      showDoctorContactNumberBorder = true;
+                                      doctorContactNumberFieldOk = false;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      showDoctorContactNumberBorder = false;
+                                      doctorContactNumberFieldOk = true;
+                                    });
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) => doctorContactNumber = value,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  labelText: 'Your Contact Number',
+                                  labelStyle: kLabelTextStyle,
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: kPageHorizontalPadding - 8,
+                                      vertical: 15.0),
+                                  isDense: true,
+                                  isCollapsed: true,
+                                  hintText: '10 digit contact number',
+                                  hintStyle: kHintTextStyle,
+                                  prefixIcon: Icon(Icons.phone),
+                                  border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(kRoundedCorners),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
+                        Visibility(
+                          visible: selectedUserType == 'Doctor' ? true : false,
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 300),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
                                 color: showDoctorSpecialityBorder
                                     ? kBorderColor
                                     : Colors.white,
@@ -564,6 +662,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   }
                                   return null;
                                 },
+                                onSaved: (value) => speciality = value,
                                 decoration: InputDecoration(
                                   filled: true,
                                   fillColor: Colors.white,
@@ -596,12 +695,94 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         SizedBox(
                           height: 20.0,
                         ),
+                        Visibility(
+                          visible: selectedUserType == 'Doctor' ? true : false,
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 300),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: showDoctorSpecialityBorder
+                                    ? kBorderColor
+                                    : Colors.white,
+                                width: 2.0,
+                              ),
+                              borderRadius:
+                                  BorderRadius.circular(kRoundedCorners),
+                            ),
+                            child: Container(
+                              // color: Colors.white,
+                              padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.circular(kRoundedCorners),
+                              ),
+                              child: TextFormField(
+                                controller: doctorAboutController,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: 5,
+                                minLines: 1,
+                                cursorColor: kPrimaryColor,
+                                validator: (value) {
+                                  if (value.isEmpty ||
+                                      value.length < 5 ||
+                                      value.length > 250) {
+                                    setState(() {
+                                      showDoctorAboutBorder = true;
+                                      doctorAboutFieldOk = false;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      showDoctorAboutBorder = false;
+                                      doctorAboutFieldOk = true;
+                                    });
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) => aboutDoctor = value,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  labelText: 'About you',
+                                  labelStyle: kLabelTextStyle,
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: kPageHorizontalPadding - 8,
+                                      vertical: 15.0),
+                                  isDense: true,
+                                  isCollapsed: true,
+                                  hintText: '250 characters maximum.',
+                                  hintStyle: kHintTextStyle,
+                                  prefixIcon:
+                                      Icon(Icons.admin_panel_settings_outlined),
+                                  border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(kRoundedCorners),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20.0,
+                        ),
                         RaisedButton(
                           onPressed: () async {
                             print(selectedUserType);
+                            print(aboutDoctor);
+                            print(doctorContactNumber);
+                            print(speciality);
+
                             email = emailController.text.toLowerCase();
                             password = passwordController.text;
-                            confirmPassword = confirmPasswordController.text;
+
                             if (_signUpFormKey.currentState.validate()) {
                               _signUpFormKey.currentState.save();
 
@@ -609,105 +790,114 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 if (lastNameFieldOk) {
                                   if (emailFieldOk) {
                                     if (passwordFieldOk) {
-                                      if (doctorSpecialityFieldOk) {
-                                        userType = selectedUserType;
+                                      if (doctorSpecialityFieldOk ||
+                                          selectedUserType == 'Citizen') {
+                                        if (doctorContactNumberFieldOk ||
+                                            selectedUserType == 'Citizen') {
+                                          userType = selectedUserType;
 
-                                        try {
-                                          FocusScopeNode currentFocus =
-                                              FocusScope.of(context);
+                                          try {
+                                            FocusScopeNode currentFocus =
+                                                FocusScope.of(context);
 
-                                          currentFocus.unfocus();
-                                          _submit();
-                                          final newUser = await _auth
-                                              .createUserWithEmailAndPassword(
-                                                  email: email,
-                                                  password: password);
-                                          getCurrentUser();
-                                          addUser();
-                                          setState(() {
-                                            _saving = false;
-                                          });
-                                          if (newUser != null) {
-                                            Navigator.pushNamed(
-                                                context, MainProfilePage.id);
-                                          }
-                                        } on FirebaseAuthException catch (e) {
-                                          if (e.code ==
-                                              'email-already-in-use') {
+                                            currentFocus.unfocus();
+                                            _submit();
+                                            final newUser = await _auth
+                                                .createUserWithEmailAndPassword(
+                                                    email: email,
+                                                    password: password);
+                                            getCurrentUser();
+                                            if (selectedUserType == 'Citizen') {
+                                              addUser();
+                                            } else {
+                                              addDoctor();
+                                            }
                                             setState(() {
                                               _saving = false;
                                             });
-                                            Future<void> _showMyDialog() async {
-                                              return showDialog<void>(
-                                                context: context,
-                                                barrierDismissible:
-                                                    true, // user must tap button!
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return BackdropFilter(
-                                                    filter: ImageFilter.blur(
-                                                        sigmaX: 2.0,
-                                                        sigmaY: 2.0),
-                                                    child: AlertDialog(
-                                                      shape: OutlineInputBorder(
-                                                        borderSide:
-                                                            BorderSide.none,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                kRoundedCorners),
-                                                      ),
-                                                      title: Text(
-                                                        'Can\'t Sign-Up You',
-                                                        style:
-                                                            kSubHeadingTextStyle
-                                                                .copyWith(
-                                                                    fontSize:
-                                                                        16.0),
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      ),
-                                                      content:
-                                                          SingleChildScrollView(
-                                                        child: ListBody(
-                                                          children: <Widget>[
-                                                            Text(
-                                                              'Email already registered, try signing-in. You can reset your password anytime if you don\'t remember.',
-                                                              style:
-                                                                  kRichTextStyle1,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      actions: <Widget>[
-                                                        FlatButton(
-                                                            onPressed: () {
-                                                              Navigator
-                                                                  .pushNamedAndRemoveUntil(
-                                                                      context,
-                                                                      SignInScreen
-                                                                          .id,
-                                                                      (route) =>
-                                                                          false);
-                                                            },
-                                                            child: Text(
-                                                              'OK',
-                                                              style:
-                                                                  kRichTextStyle2,
-                                                            ))
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                              );
+                                            if (newUser != null) {
+                                              Navigator.pushNamed(
+                                                  context, MainProfilePage.id);
                                             }
+                                          } on FirebaseAuthException catch (e) {
+                                            if (e.code ==
+                                                'email-already-in-use') {
+                                              setState(() {
+                                                _saving = false;
+                                              });
+                                              Future<void>
+                                                  _showMyDialog() async {
+                                                return showDialog<void>(
+                                                  context: context,
+                                                  barrierDismissible:
+                                                      true, // user must tap button!
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return BackdropFilter(
+                                                      filter: ImageFilter.blur(
+                                                          sigmaX: 2.0,
+                                                          sigmaY: 2.0),
+                                                      child: AlertDialog(
+                                                        shape:
+                                                            OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide.none,
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  kRoundedCorners),
+                                                        ),
+                                                        title: Text(
+                                                          'Can\'t Sign-Up You',
+                                                          style:
+                                                              kSubHeadingTextStyle
+                                                                  .copyWith(
+                                                                      fontSize:
+                                                                          16.0),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        ),
+                                                        content:
+                                                            SingleChildScrollView(
+                                                          child: ListBody(
+                                                            children: <Widget>[
+                                                              Text(
+                                                                'Email already registered, try signing-in. You can reset your password anytime if you don\'t remember.',
+                                                                style:
+                                                                    kRichTextStyle1,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        actions: <Widget>[
+                                                          FlatButton(
+                                                              onPressed: () {
+                                                                Navigator.pushNamedAndRemoveUntil(
+                                                                    context,
+                                                                    SignInScreen
+                                                                        .id,
+                                                                    (route) =>
+                                                                        false);
+                                                              },
+                                                              child: Text(
+                                                                'OK',
+                                                                style:
+                                                                    kRichTextStyle2,
+                                                              ))
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                              }
 
-                                            _showMyDialog();
+                                              _showMyDialog();
+                                            }
+                                          } catch (e) {
+                                            print(e);
                                           }
-                                        } catch (e) {
-                                          print(e);
                                         }
                                       }
                                     }
