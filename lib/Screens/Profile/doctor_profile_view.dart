@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DoctorProfileView extends StatefulWidget {
   static const id = 'DoctorProfileView';
@@ -102,7 +103,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                                 icon: FontAwesomeIcons.phoneAlt,
                               ),
                               onTap: () {
-                                print(widget.doctorContactNumber);
+                                launch("tel:${widget.doctorContactNumber}");
                               },
                             ),
                             GestureDetector(
@@ -110,7 +111,8 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                                 icon: Icons.messenger,
                               ),
                               onTap: () {
-                                print(widget.doctorContactNumber);
+                                launch(
+                                    'sms:${widget.doctorContactNumber}?body=Hi\nDr. ${widget.doctorFullName} contacting you via Doctor App for ');
                               },
                             ),
                             DoctorProfileViewActionButton(
