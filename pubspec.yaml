@@ -42,7 +42,7 @@ dependencies:
   flutter_toggle_tab: ^0.0.3+2
   firebase_analytics: ^6.3.0
   provider: ^4.3.2+3
-  date_format: ^1.0.9
+
 
 
 
