@@ -775,11 +775,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         RaisedButton(
                           onPressed: () async {
-                            print(selectedUserType);
-                            print(aboutDoctor);
-                            print(doctorContactNumber);
-                            print(speciality);
-
                             email = emailController.text.toLowerCase();
                             password = passwordController.text;
 

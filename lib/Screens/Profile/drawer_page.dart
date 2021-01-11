@@ -259,7 +259,8 @@ class DrawerListItem extends StatelessWidget {
       trailing: itemTrailingIcon,
       onTap: () {
         Navigator.pop(context);
-        Navigator.pushNamed(context, navigationPageId);
+        Navigator.pushNamed(context, navigationPageId,
+            arguments: currentUserId);
       },
     );
   }

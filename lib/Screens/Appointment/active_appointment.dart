@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:doktorapp/Screens/Profile/drawer_page.dart';
 import 'package:doktorapp/constants.dart';
 import 'package:doktorapp/globals.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 
 class ActiveAppointment extends StatefulWidget {
   static const id = 'ActiveAppointment';
+
   @override
   _ActiveAppointmentState createState() => _ActiveAppointmentState();
 }
@@ -32,37 +34,56 @@ class _ActiveAppointmentState extends State<ActiveAppointment> {
             return ListBody(
               children: [
                 StreamBuilder<QuerySnapshot>(
-                  stream: globals.appointments.snapshots(),
+                  stream: globals.appointments
+                      .where('appointmentBookedBy',
+                          isEqualTo: globals.currentUserId)
+                      .orderBy(
+                        'created',
+                      )
+                      .snapshots(),
                   builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    }
                     if (snapshot.hasData) {
                       final appointment = snapshot.data.docs;
+
                       List<AppointmentCard> appointmentCardWidgets = [];
                       for (var appointments in appointment) {
                         final appointmentPlace =
                             appointments.data()['placeOfAppointment'];
                         final appointmentTime =
                             appointments.data()['appointmentTime'];
-                        final appointmentDate =
-                            appointments.data()['dateOfAppointment'];
+                        final doctorSpecialityDb =
+                            appointments.data()['doctorSpeciality'];
+                        final doctorNameDb = appointments.data()['doctorName'];
+                        final appointmentDateDD =
+                            appointments.data()['dateOfAppointment']['date'];
+                        final appointmentDateMM =
+                            appointments.data()['dateOfAppointment']['month'];
+                        final appointmentDateYY =
+                            appointments.data()['dateOfAppointment']['year'];
                         final appointmentBookedBy =
                             appointments.data()['appointmentBookedBy'];
                         final appointmentBookedWith =
                             appointments.data()['appointmentBookedWith'];
+                        final appointmentDate =
+                            '$appointmentDateDD/$appointmentDateMM/$appointmentDateYY';
                         final appointmentCardWidget = AppointmentCard(
-                            doctorSpeciality: 'Cardiologist',
-                            doctorName: 'Jaspreet',
+                            doctorSpeciality: doctorSpecialityDb,
+                            doctorName: doctorNameDb,
                             appointmentDate: '$appointmentDate',
                             appointmentPlace: '$appointmentPlace',
                             appointmentTime: '$appointmentTime');
                         appointmentCardWidgets.add(appointmentCardWidget);
                         print(appointmentBookedBy);
-                        print(appointmentBookedWith);
                       }
 
                       return Column(
                         children: appointmentCardWidgets,
                       );
                     }
+
                     return Container(
                       margin: EdgeInsets.symmetric(vertical: 180),
                       child: NoDataComponent(
@@ -117,19 +138,24 @@ class AppointmentCard extends StatelessWidget {
                 SizedBox(
                   width: kPageHorizontalPadding,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Dr. $doctorName',
-                      overflow: TextOverflow.ellipsis,
-                      style: kSubHeadingTextStyle.copyWith(
-                          fontSize: 18.0, color: Colors.white),
-                    ),
-                    Text(doctorSpeciality,
-                        style:
-                            kSecondaryTextStyle.copyWith(color: Colors.white70))
-                  ],
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Dr. $doctorName',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        softWrap: false,
+                        style: kSubHeadingTextStyle.copyWith(
+                            fontSize: 18.0, color: Colors.white),
+                      ),
+                      Text(doctorSpeciality,
+                          style: kSecondaryTextStyle.copyWith(
+                              color: Colors.white70))
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -147,12 +173,21 @@ class AppointmentCard extends StatelessWidget {
                       style:
                           kSecondaryTextStyle.copyWith(color: Colors.white70),
                     ),
-                    Text(
-                      appointmentDate,
-                      style: kRichTextStyle1.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 16.0),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(kRoundedCorners),
+                          color: Colors.black38),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: kPageHorizontalPadding * 1,
+                          vertical: kPageVerticalPadding / 3),
+                      child: Text(
+                        appointmentDate,
+                        style: kRichTextStyle1.copyWith(
+                            color: Colors.white,
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.0),
+                      ),
                     )
                   ],
                 ),
@@ -160,40 +195,30 @@ class AppointmentCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Place',
+                      'Time',
                       style:
                           kSecondaryTextStyle.copyWith(color: Colors.white70),
                     ),
-                    Text(
-                      appointmentPlace,
-                      style: kRichTextStyle1.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          fontSize: 16.0),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(kRoundedCorners),
+                          color: Colors.black38),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: kPageHorizontalPadding * 1,
+                          vertical: kPageVerticalPadding / 3),
+                      child: Text(
+                        appointmentTime,
+                        style: kRichTextStyle1.copyWith(
+                            color: Colors.white,
+                            letterSpacing: 1,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.0),
+                      ),
                     )
                   ],
                 )
               ],
             ),
-            SizedBox(
-              height: kPageVerticalPadding,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(kRoundedCorners),
-                  color: Colors.black38),
-              padding: EdgeInsets.symmetric(
-                  horizontal: kPageHorizontalPadding * 1.5,
-                  vertical: kPageVerticalPadding / 2),
-              child: Text(
-                appointmentTime,
-                style: kRichTextStyle1.copyWith(
-                    color: Colors.white,
-                    letterSpacing: 1.2,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16.0),
-              ),
-            )
           ],
         ),
       ),

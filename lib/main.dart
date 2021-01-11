@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:doktorapp/Screens/Appointment/appointment_booked.dart';
 import 'package:doktorapp/Screens/ForgotPassword/forgot_password.dart';
 import 'package:doktorapp/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,7 +14,6 @@ import 'package:doktorapp/Screens/Consultation/consultation.dart';
 import 'package:doktorapp/Screens/MedicalRecord/medical_record.dart';
 import 'package:doktorapp/Screens/MyDoctor/my_doctor.dart';
 import 'package:doktorapp/Screens/Orders/orders.dart';
-import 'package:doktorapp/Screens/Profile/doctor_profile_view.dart';
 import 'package:doktorapp/Screens/Reminder/reminder.dart';
 import 'package:doktorapp/Screens/TestBooking/test_booking.dart';
 import 'package:doktorapp/Screens/UserProfileInfo/user_profile_info.dart';
@@ -21,6 +21,7 @@ import 'package:doktorapp/Screens/IntroductionScreen/introduction_screen.dart';
 import 'package:provider/provider.dart';
 import 'Screens/SignUp/sign_up_continue.dart';
 import 'globals.dart';
+import 'package:doktorapp/Screens/Appointment/appointment_booked.dart';
 
 void main() => runApp(MyApp());
 
@@ -83,6 +84,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
             initialRoute:
                 globals.userLoggedIn ? MainProfilePage.id : OnBoardingPage.id,
             routes: {
+              AppointmentBooked.id: (context) => AppointmentBooked(),
               SignUpContinue.id: (context) => SignUpContinue(),
               ForgotPassword.id: (context) => ForgotPassword(),
               OnBoardingPage.id: (context) => OnBoardingPage(),
