@@ -33,7 +33,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         loggedInUser = user;
 
         currentUserId = loggedInUser.uid;
-        print(currentUserId);
       }
     } catch (e) {
       print(e);
@@ -159,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         SizedBox(
-                          height: 30.0,
+                          height: 50.0,
                         ),
                         Row(
                           children: [
@@ -168,7 +167,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               color: kPrimaryColor,
                             ),
                             Text(
-                              ' New Registration',
+                              ' Sign Up',
                               style: kBigHeadingTextStyle,
                             ),
                           ],
@@ -616,8 +615,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 20.0,
+                        Visibility(
+                          visible: selectedUserType == 'Doctor' ? true : false,
+                          child: SizedBox(
+                            height: 20.0,
+                          ),
                         ),
                         Visibility(
                           visible: selectedUserType == 'Doctor' ? true : false,
@@ -692,8 +694,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 20.0,
+                        Visibility(
+                          visible: selectedUserType == 'Doctor' ? true : false,
+                          child: SizedBox(
+                            height: 20.0,
+                          ),
                         ),
                         Visibility(
                           visible: selectedUserType == 'Doctor' ? true : false,
@@ -770,8 +775,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 20.0,
+                        Visibility(
+                          visible: selectedUserType == 'Doctor' ? true : false,
+                          child: SizedBox(
+                            height: 20.0,
+                          ),
                         ),
                         RaisedButton(
                           onPressed: () async {

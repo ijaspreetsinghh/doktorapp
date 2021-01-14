@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:doktorapp/Screens/Profile/drawer_page.dart';
 import 'package:doktorapp/constants.dart';
 import 'package:doktorapp/globals.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +42,16 @@ class _ActiveAppointmentState extends State<ActiveAppointment> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return Center(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 40.0,
+                            ),
+                            CircularProgressIndicator(),
+                          ],
+                        ),
+                      );
                     }
                     if (snapshot.hasData) {
                       final appointment = snapshot.data.docs;

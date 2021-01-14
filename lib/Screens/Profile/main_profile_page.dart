@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter/services.dart';
 import 'package:doktorapp/Screens/SignIn/sign_in_screen.dart';
 import 'package:doktorapp/globals.dart';
 import 'package:double_back_to_close/double_back_to_close.dart';
@@ -41,11 +41,11 @@ class _MainProfilePageState extends State<MainProfilePage> {
         inAsyncCall: _saving,
         opacity: 0.7,
         child: Consumer<Globals>(builder: (context, globals, child) {
-          globals.getUserData();
-          globals.getCategories();
-          globals.getUserData();
-          globals.getDoctorData();
-          globals.getAppointments();
+          // globals.getUserData();
+          // globals.getCategories();
+          // globals.getUserData();
+          // globals.getDoctorData();
+          // globals.getAppointments();
 
           return DoubleBack(
             onFirstBackPress: (context) {

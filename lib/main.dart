@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:doktorapp/Screens/Appointment/appointment_booked.dart';
 import 'package:doktorapp/Screens/ForgotPassword/forgot_password.dart';
+import 'package:doktorapp/Screens/Profile/settings.dart';
 import 'package:doktorapp/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,13 +74,11 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
     return Provider<Globals>(
         create: (_) => Globals(),
         child: Consumer<Globals>(builder: (context, globals, child) {
-          globals.getDoctorData();
-          globals.getUserData();
-          globals.getCurrentUser();
           globals.getAppointments();
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             color: kPrimaryColor,
+            themeMode: ThemeMode.dark,
             initialRoute:
                 globals.userLoggedIn ? MainProfilePage.id : OnBoardingPage.id,
             routes: {
@@ -96,6 +94,7 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
               MedicalRecord.id: (context) => MedicalRecord(),
               MyDoctor.id: (context) => MyDoctor(),
               Reminder.id: (context) => Reminder(),
+              AppSettings.id: (context) => AppSettings(),
               Orders.id: (context) => Orders(),
               TestBooking.id: (context) => TestBooking(),
               UserProfileInfo.id: (context) => UserProfileInfo(),

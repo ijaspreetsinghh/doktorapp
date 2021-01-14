@@ -2,6 +2,7 @@ import 'package:doktorapp/Screens/Consultation/consultation.dart';
 import 'package:doktorapp/Screens/MedicalRecord/medical_record.dart';
 import 'package:doktorapp/Screens/MyDoctor/my_doctor.dart';
 import 'package:doktorapp/Screens/Orders/orders.dart';
+import 'package:doktorapp/Screens/Profile/settings.dart';
 import 'package:doktorapp/Screens/Reminder/reminder.dart';
 import 'package:doktorapp/Screens/SignIn/sign_in_screen.dart';
 import 'package:doktorapp/Screens/TestBooking/test_booking.dart';
@@ -207,7 +208,7 @@ class _DrawerPageState extends State<DrawerPage> {
                   size: kDrawerListItemTrailingIconSize,
                 ),
                 onTap: () {
-                  print('settings pressed');
+                  Navigator.pushNamed(context, AppSettings.id);
                 },
               ),
               Divider(
