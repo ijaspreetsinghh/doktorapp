@@ -4,7 +4,6 @@ import 'package:doktorapp/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:doktorapp/globals.dart';
 import 'package:provider/provider.dart';
 import 'package:doktorapp/Screens/Profile/doctor_profile_view.dart';

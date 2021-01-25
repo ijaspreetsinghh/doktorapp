@@ -5,8 +5,8 @@ import 'package:doktorapp/constants.dart';
 import 'package:doktorapp/globals.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:ui';
-
 import 'package:provider/provider.dart';
+import 'dart:async';
 
 class UserProfileInfo extends StatefulWidget {
   static const id = 'UserProfileInfo';
@@ -118,9 +118,7 @@ class _TabsUserInfoState extends State<TabsUserInfo> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 FlatButton(
-                                                    onPressed: () {
-                                                      print('1');
-                                                    },
+                                                    onPressed: () {},
                                                     child: Row(
                                                       children: [
                                                         Icon(Icons

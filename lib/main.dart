@@ -21,7 +21,6 @@ import 'package:doktorapp/Screens/IntroductionScreen/introduction_screen.dart';
 import 'package:provider/provider.dart';
 import 'Screens/SignUp/sign_up_continue.dart';
 import 'globals.dart';
-import 'package:doktorapp/Screens/Appointment/appointment_booked.dart';
 
 void main() => runApp(MyApp());
 
