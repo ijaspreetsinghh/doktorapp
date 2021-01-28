@@ -75,11 +75,14 @@ class _ActiveAppointmentState extends State<ActiveAppointment> {
                             appointments.data()['appointmentBookedBy'];
                         final appointmentBookedWith =
                             appointments.data()['appointmentBookedWith'];
+                        final doctorAvatar =
+                        appointments.data()['doctorAvatar'];
                         final appointmentDate =
                             '$appointmentDateDD/$appointmentDateMM/$appointmentDateYY';
                         final appointmentCardWidget = AppointmentCard(
                             doctorSpeciality: doctorSpecialityDb,
                             doctorName: doctorNameDb,
+                            doctorAvatar: doctorAvatar,
                             appointmentDate: '$appointmentDate',
                             appointmentPlace: '$appointmentPlace',
                             appointmentTime: '$appointmentTime');
@@ -112,11 +115,13 @@ class AppointmentCard extends StatelessWidget {
   final String doctorName;
   final String doctorSpeciality;
   final String appointmentDate;
+  final String doctorAvatar;
   final String appointmentPlace;
   final String appointmentTime;
   AppointmentCard(
       {@required this.doctorSpeciality,
       @required this.doctorName,
+        @required this.doctorAvatar,
       @required this.appointmentDate,
       @required this.appointmentPlace,
       @required this.appointmentTime});
@@ -140,7 +145,7 @@ class AppointmentCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/userImage.jpg'),
+                  backgroundImage: NetworkImage(doctorAvatar),
                   radius: 30.0,
                 ),
                 SizedBox(

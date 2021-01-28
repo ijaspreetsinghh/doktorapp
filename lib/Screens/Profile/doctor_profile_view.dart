@@ -13,12 +13,14 @@ class DoctorProfileView extends StatefulWidget {
   final doctorSpeciality;
   final doctorFullName;
   final doctorId;
+  final doctorAvatar;
   final doctorContactNumber;
   final doctorAbout;
   DoctorProfileView(
       {@required this.doctorFullName,
       @required this.doctorSpeciality,
       @required this.doctorAbout,
+        @required this.doctorAvatar,
       @required this.doctorId,
       @required this.doctorContactNumber});
   @override
@@ -56,7 +58,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                     children: [
                       CircleAvatar(
                         backgroundImage:
-                            AssetImage('assets/images/defaultProfileImage.png'),
+                            NetworkImage(widget.doctorAvatar),
                         radius: kLargeCircleAvatarRadius,
                       ),
                       SizedBox(
@@ -143,7 +145,7 @@ class _DoctorProfileViewState extends State<DoctorProfileView> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BookAppointment(
+                        builder: (context) => BookAppointment(doctorAvatar: widget.doctorAvatar,
                               doctorName: widget.doctorFullName,
                               doctorId: widget.doctorId,
                               doctorSpeciality: widget.doctorSpeciality,

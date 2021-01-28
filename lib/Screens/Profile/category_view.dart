@@ -114,12 +114,13 @@ class _CategoryViewState extends State<CategoryView> {
                         final docAbout = docs.data()['doctorAbout'];
                         final docId = docs.data()['userId'];
                         final docNumber = docs.data()['doctorContactNumber'];
+                        final docAvatar = docs.data()['doctorAvatar'];
                         final doctorWidget = TopDoctorsBuilder(
                             doctorAbout: docAbout,
                             doctorId: docId,
                             doctorNumber: docNumber,
-                            doctorAvatarAssetName:
-                                'assets/images/userImage.jpg',
+                            doctorAvatarAssetName:docAvatar
+                            ,
                             doctorName: '$docFirstName $docLastName',
                             doctorSpeciality: '$docSpeciality');
                         topDoctorWidget.add(doctorWidget);
@@ -167,6 +168,7 @@ class TopDoctorsBuilder extends StatelessWidget {
                   builder: (context) => DoctorProfileView(
                         doctorFullName: this.doctorName,
                         doctorId: this.doctorId,
+                        doctorAvatar: this.doctorAvatarAssetName,
                         doctorSpeciality: this.doctorSpeciality,
                         doctorAbout: this.doctorAbout,
                         doctorContactNumber: this.doctorNumber,
@@ -187,8 +189,8 @@ class TopDoctorsBuilder extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage(doctorAvatarAssetName),
-                  radius: kMediumCircleAvatarRadius,
+                  backgroundImage: NetworkImage(doctorAvatarAssetName),
+                  radius: kMediumCircleAvatarRadius,backgroundColor: Colors.white,
                 ),
                 SizedBox(
                   width: kPageHorizontalPadding - 2,

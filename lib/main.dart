@@ -74,6 +74,8 @@ class _MyMaterialAppState extends State<MyMaterialApp> {
         create: (_) => Globals(),
         child: Consumer<Globals>(builder: (context, globals, child) {
           globals.getAppointments();
+          globals.getCurrentUser();
+          globals.getUserData();
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             color: kPrimaryColor,

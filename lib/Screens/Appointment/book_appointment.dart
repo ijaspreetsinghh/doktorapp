@@ -10,10 +10,12 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 class BookAppointment extends StatefulWidget {
   final String doctorName;
   final String doctorSpeciality;
+  final doctorAvatar;
   final String doctorId;
   BookAppointment(
       {@required this.doctorName,
       @required this.doctorSpeciality,
+        @required this.doctorAvatar,
       @required this.doctorId});
   @override
   _BookAppointmentState createState() => _BookAppointmentState();
@@ -68,6 +70,7 @@ class _BookAppointmentState extends State<BookAppointment> {
           'doctorName': widget.doctorName,
           'doctorSpeciality': widget.doctorSpeciality,
           'descriptionOfAppointment': description,
+      'doctorAvatar':widget.doctorAvatar,
 
           // Stokes and Sons
         })
@@ -178,6 +181,7 @@ class _BookAppointmentState extends State<BookAppointment> {
                       AppointmentCard(
                         doctorSpeciality: '${widget.doctorSpeciality}',
                         doctorName: '${widget.doctorName}',
+                        doctorAvatar: '${widget.doctorAvatar}',
                       ),
                       SizedBox(
                         height: kPageVerticalPadding,
@@ -466,10 +470,11 @@ class _BookAppointmentState extends State<BookAppointment> {
 class AppointmentCard extends StatelessWidget {
   final String doctorName;
   final String doctorSpeciality;
-
+final String doctorAvatar;
   AppointmentCard({
     @required this.doctorSpeciality,
     @required this.doctorName,
+    @required this.doctorAvatar,
   });
   @override
   Widget build(BuildContext context) {
@@ -490,7 +495,7 @@ class AppointmentCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/userImage.jpg'),
+                  backgroundImage: NetworkImage(doctorAvatar),
                   radius: 30.0,
                 ),
                 SizedBox(

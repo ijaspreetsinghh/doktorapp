@@ -32,6 +32,7 @@ class _DrawerPageState extends State<DrawerPage> {
     return Drawer(
       child: Consumer<Globals>(
         builder: (context, globals, child) {
+          globals.getCurrentUser();
           globals.getUserData();
           return ListView(
             children: <Widget>[

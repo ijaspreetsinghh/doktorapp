@@ -156,7 +156,7 @@ class _ProfilePageContentState extends State<ProfilePageContent> {
                           height: kPageVerticalPadding,
                         ),
                         StreamBuilder<QuerySnapshot>(
-                          stream: globals.doctors.snapshots(),
+                          stream: globals.doctors.limit(6).snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               final doc = snapshot.data.docs;
@@ -167,14 +167,14 @@ class _ProfilePageContentState extends State<ProfilePageContent> {
                                 final docSpeciality = docs.data()['speciality'];
                                 final docAbout = docs.data()['doctorAbout'];
                                 final docId = docs.data()['userId'];
+                                final docAvatar = docs.data()['doctorAvatar'];
                                 final docNumber =
                                     docs.data()['doctorContactNumber'];
                                 final doctorWidget = TopDoctorsBuilder(
                                     doctorAbout: docAbout,
                                     doctorId: docId,
                                     doctorNumber: docNumber,
-                                    doctorAvatarAssetName:
-                                        'assets/images/userImage.jpg',
+                                    doctorAvatarAssetName: docAvatar,
                                     doctorName: '$docFirstName $docLastName',
                                     doctorSpeciality: '$docSpeciality');
                                 topDoctorWidget.add(doctorWidget);
@@ -217,6 +217,7 @@ class TopDoctorsBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<Globals>(builder: (context, globals, child) {
+      globals.getCurrentUser();
       globals.getUserData();
       return GestureDetector(
         onTap: () {
@@ -226,6 +227,7 @@ class TopDoctorsBuilder extends StatelessWidget {
                   builder: (context) => DoctorProfileView(
                         doctorFullName: this.doctorName,
                         doctorId: this.doctorId,
+                        doctorAvatar: this.doctorAvatarAssetName,
                         doctorSpeciality: this.doctorSpeciality,
                         doctorAbout: this.doctorAbout,
                         doctorContactNumber: this.doctorNumber,
@@ -246,8 +248,8 @@ class TopDoctorsBuilder extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage(doctorAvatarAssetName),
-                  radius: kMediumCircleAvatarRadius,
+                  backgroundImage: NetworkImage(doctorAvatarAssetName),
+                  radius: kMediumCircleAvatarRadius,backgroundColor: Colors.white,
                 ),
                 SizedBox(
                   width: kPageHorizontalPadding - 2,

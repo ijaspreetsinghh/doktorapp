@@ -18,7 +18,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
   Widget _buildImage(String assetName) {
     return Align(
-      child: Image.asset('assets/images/$assetName.jpg', width: 350.0),
+      child: Image.asset('assets/images/$assetName.jpg',fit: BoxFit.cover,),
       alignment: Alignment.bottomCenter,
     );
   }
@@ -36,60 +36,42 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
 
     return IntroductionScreen(
       key: introKey,
-      pages: [
+      pages: [ PageViewModel(
+        title: "Welcome to Doctor App",
+        body: "Appointment Booking System with Flutter and Firebase.",
+        image: _buildImage('logo'),
+
+        decoration: pageDecoration,
+      ),
         PageViewModel(
-          title: "Fractional shares",
+          title: "Home Page",
           body:
-              "Instead of having to buy an entire share, invest any amount you want.",
-          image: _buildImage('userImage'),
+              "Homepage consists of categories and top doctor from all categories.",
+          image: _buildImage('on1'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Learn as you go",
+          title: "Category View",
           body:
-              "Download the Stockpile app and master the market with our mini-lesson.",
-          image: _buildImage('userImage'),
+              "All specialists of specific category.",
+          image: _buildImage('on3'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Kids and teens",
+          title: "Doctor details",
           body:
-              "Kids and teens can track their stocks 24/7 and place trades that you approve.",
-          image: _buildImage('userImage'),
+              "Preview doctor details and book appointment if interested.",
+          image: _buildImage('on2'),
           decoration: pageDecoration,
         ),
         PageViewModel(
-          title: "Another title page",
-          body: "Another beautiful body text for this example onboarding",
-          image: _buildImage('userImage'),
-          footer: RaisedButton(
-            onPressed: () {
-              introKey.currentState?.animateScroll(0);
-            },
-            child: const Text(
-              'FooButton',
-              style: TextStyle(color: Colors.white),
-            ),
-            color: Colors.lightBlue,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
+          title: "Appointment booking screen",
+          body: "Select prefered date and time and pre appointment details.",
+          image: _buildImage('on4'),
+
           decoration: pageDecoration,
         ),
-        PageViewModel(
-          title: "Title of last page",
-          bodyWidget: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text("Click on ", style: bodyStyle),
-              Icon(Icons.edit),
-              Text(" to edit a post", style: bodyStyle),
-            ],
-          ),
-          image: _buildImage('userImage'),
-          decoration: pageDecoration,
-        ),
+
       ],
       onDone: () => _onIntroEnd(context),
       //onSkip: () => _onIntroEnd(context), // You can override onSkip callback
