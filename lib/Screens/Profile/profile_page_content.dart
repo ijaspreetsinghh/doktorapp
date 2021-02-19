@@ -326,8 +326,8 @@ class HorizontalListCategoryItemBuilder extends StatelessWidget {
           gradient: kPrimaryGradient,
           borderRadius: BorderRadius.circular(kRoundedCorners),
         ),
-        width: 90.0,
-        height: 105.0,
+        width: 105.0,
+        height: 130.0,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
